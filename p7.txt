@@ -1,0 +1,83 @@
+object QuickSortMenu {
+
+  def imperativeSort(a: Array[Int]): Unit = {
+    def swap(i: Int, j: Int): Unit = {
+      val t = a(i); a(i) = a(j); a(j) = t
+    }
+
+    def sort1(l: Int, r: Int): Unit = {
+      val pivot = a((l + r) / 2)
+      var i = l
+      var j = r
+      while (i <= j) {
+        while (a(i) < pivot) i += 1
+        while (a(j) > pivot) j -= 1
+        if (i <= j) {
+          swap(i, j)
+          i += 1
+          j -= 1
+        }
+      }
+      if (l < j) sort1(l, j)
+      if (i < r) sort1(i, r)
+    }
+
+    if (a.length > 0)
+      sort1(0, a.length - 1)
+  }
+
+  def functionalSort(a: List[Int]): List[Int] = {
+    if (a.length < 2)
+      a
+    else {
+      val pivot = a(a.length / 2)
+      val lesser = a.filter(_ < pivot)
+      val equal = a.filter(_ == pivot)
+      val greater = a.filter(_ > pivot)
+      functionalSort(lesser) ::: equal ::: functionalSort(greater)
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    var ar = Array(6, 5, 2, 1, 8)
+    var mode = 0
+    var continueFlag = true
+
+    while (continueFlag) {
+      println("========== QuickSort Menu ==========")
+      println("1. Imperative QuickSort")
+      println("2. Functional QuickSort")
+      println("3. Exit")
+      println("====================================")
+
+      print("Enter your choice (1-3): ")
+      mode = scala.io.StdIn.readInt()
+
+      mode match {
+        case 1 =>
+          println("Selected: Imperative QuickSort")
+          val list = ar.toList
+          println("Original List: " + list)
+          imperativeSort(ar)
+          val sortedList = ar.toList
+          println("Sorted List: " + sortedList)
+
+        case 2 =>
+          println("Selected: Functional QuickSort")
+          val list = ar.toList
+          println("Original List: " + list)
+          val sortedList = functionalSort(list)
+          println("Sorted List: " + sortedList)
+
+        case 3 =>
+          println("Exiting the program...")
+          continueFlag = false
+
+        case _ =>
+          println("Invalid choice. Please try again.")
+      }
+
+      println()
+    }
+  }
+}
